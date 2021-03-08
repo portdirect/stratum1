@@ -1,0 +1,39 @@
+#cloud-config
+ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCAWBkS5iD7ORK59YUjJlPiWnzZXoFPbxlo8kvXjeGVgtUVD/FORZBvztoB9J1xTgE+DEg0dE2DiVrh3WXMWnUUwyaqjIu5Edo++P7xb53T9xRC7TUfc798NLAGk3CD8XvEGbDB7CD6Tvx7HcAco0WpEcPePcTcv89rZGPjal1nY4kGNT/0TWeECm99cXuWFjKm6WiMrir9ZN1yLcX/gjugrHmAGm8kQ/NJVEDRgSPV6jhppp7P/1+yqIUOOOXLx61d8oVG+ADlXEckXoetqHYjbzisxO/wa2KFM7cb5NTVKHFmxwVKX4kJeRL+I/94yLCiG05PidUFsIMzByPBEe/
+
+fqdn: stratum1.localdomain
+hostname: stratum1
+
+package_update: true
+package_upgrade: true
+packages:
+- pps-tools
+- gpsd
+- gpsd-clients
+- chrony
+- i2c-tools
+
+runcmd:
+ - [ rm, -f, /etc/apparmor.d/usr.sbin.gpsd ]
+ - [ rm, -f, /etc/apparmor.d/usr.sbin.chronyd ]
+ - [ systemctl, disable, serial-getty@ttyAMA0.service ]
+ - [ systemctl, mask, serial-getty@ttyAMA0.service ]
+ - [ systemctl, enable, gpsd.service ]
+ - [ apt-get, purge, -y, snapd ]
+ - [ apt-get, purge, -y, systemd-timesyncd ]
+ - [ systemctl, disable, --now, multipathd.socket ]
+ - [ systemctl, disable, --now, multipathd.service ]
+ - [ systemctl, disable, --now, atd.service ]
+ - [ systemctl, disable, --now, cron.service ]
+ - [ systemctl, disable, --now, unattended-upgrades.service ]
+ - [ systemctl, disable, --now, rsyslog.service ]
+ - [ systemctl, disable, --now, wpa_supplicant.service ]
+ - [ apt-get, -y, autoremove ]
+
+power_state:
+ delay: "now"
+ mode: reboot
+ message: Rebooting
+ timeout: 30
+ condition: True

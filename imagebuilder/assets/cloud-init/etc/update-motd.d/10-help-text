@@ -1,0 +1,4 @@
+#!/bin/sh
+printf "\n"
+printf " * NTP Sources:    chronyc sources\n"
+printf " * GPS Status:     gpsmon\n"

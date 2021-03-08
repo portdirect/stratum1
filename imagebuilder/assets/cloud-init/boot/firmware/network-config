@@ -1,0 +1,34 @@
+# This file contains a netplan-compatible configuration which cloud-init
+# will apply on first-boot. Please refer to the cloud-init documentation and
+# the netplan reference for full details:
+#
+# https://cloudinit.readthedocs.io/
+# https://netplan.io/reference
+#
+# Some additional examples are commented out below
+
+version: 2
+ethernets:
+  eth0:
+    accept-ra: false
+    dhcp4: true
+    dhcp4-overrides:
+        hostname: stratum1
+        route-metric: 100
+        send-hostname: true
+    dhcp6: false
+    link-local: []
+    optional: true
+# wifis:
+#   wlan0:
+#     dhcp4: true
+#     dhcp4-overrides:
+#         hostname: stratum1-wifi
+#         route-metric: 200
+#         send-hostname: true
+#     optional: true
+#     dhcp6: false
+#     link-local: []
+#     access-points:
+#       "ssid":
+#         password: "password"
